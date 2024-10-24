@@ -1,0 +1,24 @@
+package ru.azenizzka.app.entities;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ru.azenizzka.app.telegram.handlers.InputType;
+
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+public class Person {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+
+  private String chatId;
+  private int groupNum;
+
+  private String username;
+  private boolean isAdmin;
+  private InputType inputType;
+}
