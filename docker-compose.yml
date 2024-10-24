@@ -10,6 +10,9 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      BOT_NAME: ${BOT_NAME}
+      BOT_TOKEN: ${BOT_TOKEN}
+      BOT_AUDIT_CHATID: ${BOT_AUDIT_CHATID}
     command: ./gradlew bootRun
     depends_on:
       - db
