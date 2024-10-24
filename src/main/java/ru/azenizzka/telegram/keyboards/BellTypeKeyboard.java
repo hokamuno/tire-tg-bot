@@ -1,11 +1,11 @@
-package ru.azenizzka.app.telegram.keyboards;
+package ru.azenizzka.telegram.keyboards;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.azenizzka.app.utils.MessagesConfig;
+import ru.azenizzka.utils.MessagesConfig;
 
 public class BellTypeKeyboard {
   public static void addKeyboard(SendMessage message) {

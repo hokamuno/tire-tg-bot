@@ -1,4 +1,4 @@
-package ru.azenizzka.app.services;
+package ru.azenizzka.services;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -17,8 +17,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
-import ru.azenizzka.app.utils.Day;
-import ru.azenizzka.app.utils.DayUtil;
+import ru.azenizzka.utils.Day;
+import ru.azenizzka.utils.DayUtil;
 
 // TODO: полностью переписать всю эту залупу
 

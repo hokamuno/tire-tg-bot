@@ -1,6 +1,6 @@
-package ru.azenizzka.app.services;
+package ru.azenizzka.services;
 
-import ru.azenizzka.app.utils.BellType;
+import ru.azenizzka.utils.BellType;
 
 public class BellScheduleService {
   private static byte[][][] bellRecess;

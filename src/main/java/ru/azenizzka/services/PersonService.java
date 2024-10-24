@@ -1,10 +1,10 @@
-package ru.azenizzka.app.services;
+package ru.azenizzka.services;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.azenizzka.app.entities.Person;
-import ru.azenizzka.app.repositories.PersonRepository;
+import ru.azenizzka.entities.Person;
+import ru.azenizzka.repositories.PersonRepository;
 
 @Service
 @Transactional(readOnly = true)

@@ -1,15 +1,15 @@
-package ru.azenizzka.app.telegram.commands;
+package ru.azenizzka.telegram.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.azenizzka.app.entities.Person;
-import ru.azenizzka.app.services.PersonService;
-import ru.azenizzka.app.telegram.messages.ErrorMessage;
-import ru.azenizzka.app.telegram.messages.NotifyMessage;
-import ru.azenizzka.app.utils.MessagesConfig;
+import ru.azenizzka.entities.Person;
+import ru.azenizzka.services.PersonService;
+import ru.azenizzka.telegram.messages.ErrorMessage;
+import ru.azenizzka.telegram.messages.NotifyMessage;
+import ru.azenizzka.utils.MessagesConfig;
 
 @Component
 public class BroadcastCommand implements Command {

@@ -1,4 +1,4 @@
-package ru.azenizzka.app.telegram.handlers;
+package ru.azenizzka.telegram.handlers;
 
 public enum InputType {
   COMMAND,

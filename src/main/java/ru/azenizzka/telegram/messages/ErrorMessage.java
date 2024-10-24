@@ -1,8 +1,8 @@
-package ru.azenizzka.app.telegram.messages;
+package ru.azenizzka.telegram.messages;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.azenizzka.app.telegram.keyboards.MainKeyboard;
-import ru.azenizzka.app.utils.MessagesConfig;
+import ru.azenizzka.telegram.keyboards.MainKeyboard;
+import ru.azenizzka.utils.MessagesConfig;
 
 public class ErrorMessage extends SendMessage {
   public ErrorMessage(String chatId, String errorMessage) {

@@ -1,16 +1,16 @@
-package ru.azenizzka.app.telegram.handlers;
+package ru.azenizzka.telegram.handlers;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.azenizzka.app.entities.Person;
-import ru.azenizzka.app.exceptions.BellTypeConvertException;
-import ru.azenizzka.app.services.BellScheduleService;
-import ru.azenizzka.app.telegram.keyboards.KeyboardType;
-import ru.azenizzka.app.telegram.messages.CustomMessage;
-import ru.azenizzka.app.telegram.messages.ErrorMessage;
-import ru.azenizzka.app.utils.BellUtil;
+import ru.azenizzka.entities.Person;
+import ru.azenizzka.exceptions.BellTypeConvertException;
+import ru.azenizzka.services.BellScheduleService;
+import ru.azenizzka.telegram.keyboards.KeyboardType;
+import ru.azenizzka.telegram.messages.CustomMessage;
+import ru.azenizzka.telegram.messages.ErrorMessage;
+import ru.azenizzka.utils.BellUtil;
 
 @Component
 public class BellTypeHandler implements Handler {

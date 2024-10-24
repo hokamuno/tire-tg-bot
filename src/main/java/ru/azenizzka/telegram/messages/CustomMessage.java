@@ -1,7 +1,7 @@
-package ru.azenizzka.app.telegram.messages;
+package ru.azenizzka.telegram.messages;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.azenizzka.app.telegram.keyboards.*;
+import ru.azenizzka.telegram.keyboards.*;
 
 public class CustomMessage extends SendMessage {
   public CustomMessage(String chatId, KeyboardType keyboardType) {

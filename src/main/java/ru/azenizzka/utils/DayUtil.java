@@ -1,8 +1,8 @@
-package ru.azenizzka.app.utils;
+package ru.azenizzka.utils;
 
 import java.util.HashMap;
 import java.util.Map;
-import ru.azenizzka.app.exceptions.BellTypeConvertException;
+import ru.azenizzka.exceptions.BellTypeConvertException;
 
 public class DayUtil {
   public static final Map<String, Integer> strIntMap = new HashMap<>(7);

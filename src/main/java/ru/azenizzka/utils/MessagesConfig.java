@@ -1,4 +1,4 @@
-package ru.azenizzka.app.utils;
+package ru.azenizzka.utils;
 
 public class MessagesConfig {
   public static final String RETURN_COMMAND = "/назад";

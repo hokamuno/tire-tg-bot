@@ -1,4 +1,4 @@
-package ru.azenizzka.app.telegram;
+package ru.azenizzka.telegram;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -6,11 +6,11 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.azenizzka.app.configuration.TelegramBotConfiguration;
-import ru.azenizzka.app.entities.Person;
-import ru.azenizzka.app.services.PersonService;
-import ru.azenizzka.app.telegram.handlers.InputType;
-import ru.azenizzka.app.telegram.handlers.MasterHandler;
+import ru.azenizzka.configuration.TelegramBotConfiguration;
+import ru.azenizzka.entities.Person;
+import ru.azenizzka.services.PersonService;
+import ru.azenizzka.telegram.handlers.InputType;
+import ru.azenizzka.telegram.handlers.MasterHandler;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {

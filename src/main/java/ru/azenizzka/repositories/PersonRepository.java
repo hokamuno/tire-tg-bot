@@ -1,7 +1,7 @@
-package ru.azenizzka.app.repositories;
+package ru.azenizzka.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.azenizzka.app.entities.Person;
+import ru.azenizzka.entities.Person;
 
 public interface PersonRepository extends JpaRepository<Person, Integer> {
   boolean existsByChatId(String chatId);

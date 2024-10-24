@@ -1,10 +1,10 @@
-package ru.azenizzka.app.entities;
+package ru.azenizzka.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.azenizzka.app.telegram.handlers.InputType;
+import ru.azenizzka.telegram.handlers.InputType;
 
 @NoArgsConstructor
 @Getter

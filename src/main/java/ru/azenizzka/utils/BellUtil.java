@@ -1,6 +1,6 @@
-package ru.azenizzka.app.utils;
+package ru.azenizzka.utils;
 
-import ru.azenizzka.app.exceptions.BellTypeConvertException;
+import ru.azenizzka.exceptions.BellTypeConvertException;
 
 public class BellUtil {
   public static BellType convertStrToBell(String str) throws BellTypeConvertException {

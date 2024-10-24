@@ -1,4 +1,4 @@
-package ru.azenizzka.app.utils;
+package ru.azenizzka.utils;
 
 public enum BellType {
   MAIN,

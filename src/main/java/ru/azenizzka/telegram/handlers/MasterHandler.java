@@ -1,13 +1,13 @@
-package ru.azenizzka.app.telegram.handlers;
+package ru.azenizzka.telegram.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.azenizzka.app.configuration.TelegramBotConfiguration;
-import ru.azenizzka.app.entities.Person;
-import ru.azenizzka.app.utils.MessagesConfig;
+import ru.azenizzka.configuration.TelegramBotConfiguration;
+import ru.azenizzka.entities.Person;
+import ru.azenizzka.utils.MessagesConfig;
 
 @Component
 public class MasterHandler implements Handler {

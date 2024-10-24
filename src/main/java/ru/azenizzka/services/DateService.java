@@ -1,4 +1,4 @@
-package ru.azenizzka.app.services;
+package ru.azenizzka.services;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

@@ -1,4 +1,4 @@
-package ru.azenizzka.app.configuration;
+package ru.azenizzka.configuration;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.azenizzka.app.telegram.TelegramBot;
+import ru.azenizzka.telegram.TelegramBot;
 
 @Getter
 @Configuration

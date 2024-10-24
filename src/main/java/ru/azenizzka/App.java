@@ -1,4 +1,4 @@
-package ru.azenizzka.app;
+package ru.azenizzka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

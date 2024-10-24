@@ -1,4 +1,4 @@
-package ru.azenizzka.app.telegram.handlers;
+package ru.azenizzka.telegram.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.azenizzka.app.configuration.TelegramBotConfiguration;
-import ru.azenizzka.app.entities.Person;
-import ru.azenizzka.app.telegram.messages.CustomMessage;
-import ru.azenizzka.app.telegram.messages.NotifyMessage;
+import ru.azenizzka.configuration.TelegramBotConfiguration;
+import ru.azenizzka.entities.Person;
+import ru.azenizzka.telegram.messages.CustomMessage;
+import ru.azenizzka.telegram.messages.NotifyMessage;
 
 @Component
 public class AuditLogHandler implements Handler {

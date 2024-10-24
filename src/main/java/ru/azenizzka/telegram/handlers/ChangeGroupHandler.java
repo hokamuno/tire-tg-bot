@@ -1,15 +1,15 @@
-package ru.azenizzka.app.telegram.handlers;
+package ru.azenizzka.telegram.handlers;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.azenizzka.app.entities.Person;
-import ru.azenizzka.app.services.LessonScheduleService;
-import ru.azenizzka.app.telegram.keyboards.KeyboardType;
-import ru.azenizzka.app.telegram.messages.CustomMessage;
-import ru.azenizzka.app.telegram.messages.ErrorMessage;
-import ru.azenizzka.app.utils.MessagesConfig;
+import ru.azenizzka.entities.Person;
+import ru.azenizzka.services.LessonScheduleService;
+import ru.azenizzka.telegram.keyboards.KeyboardType;
+import ru.azenizzka.telegram.messages.CustomMessage;
+import ru.azenizzka.telegram.messages.ErrorMessage;
+import ru.azenizzka.utils.MessagesConfig;
 
 @Component
 public class ChangeGroupHandler implements Handler {

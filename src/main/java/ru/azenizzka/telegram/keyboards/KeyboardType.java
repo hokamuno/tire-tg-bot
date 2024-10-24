@@ -1,4 +1,4 @@
-package ru.azenizzka.app.telegram.keyboards;
+package ru.azenizzka.telegram.keyboards;
 
 public enum KeyboardType {
   MAIN,
