@@ -39,7 +39,7 @@ public class RecessHandler implements Handler {
           new CustomMessage(
               person.getChatId(),
               KeyboardType.MAIN,
-              "Пожалуйста, подождите. Получаю расписание с сайта..");
+              "⏳ Пожалуйста, подождите. Получаю расписание с сайта..");
       TelegramBot.getInstance().sendMessage(List.of(pleaseWaitMessage));
 
       List<List<String>> lessons = lessonScheduleService.getLessons(person.getGroupNum(), day);
