@@ -22,7 +22,8 @@ public class CommandsHandler implements Handler {
       ScheduleCommand scheduleCommand,
       BroadcastCommand broadcastCommand,
       DelAdminCommand delAdminCommand,
-      SetAdminCommand setAdminCommand) {
+      SetAdminCommand setAdminCommand,
+      StartCommand startCommand) {
     this.commands = new ArrayList<>();
 
     commands.add(returnCommand);
@@ -32,6 +33,7 @@ public class CommandsHandler implements Handler {
     commands.add(broadcastCommand);
     commands.add(delAdminCommand);
     commands.add(setAdminCommand);
+    commands.add(startCommand);
 
     commands.add(infoCommand);
   }
