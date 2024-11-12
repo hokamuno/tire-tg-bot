@@ -1,5 +1,6 @@
 package ru.azenizzka.telegram.commands;
 
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.azenizzka.entities.Person;
@@ -9,6 +10,7 @@ import ru.azenizzka.utils.MessagesConfig;
 
 import java.util.List;
 
+@Component
 public class StartCommand implements Command {
     @Override
     public String getCommand() {
