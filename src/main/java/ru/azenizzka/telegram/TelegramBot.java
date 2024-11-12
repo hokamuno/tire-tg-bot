@@ -1,6 +1,7 @@
 package ru.azenizzka.telegram;
 
 import java.util.List;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,10 +16,9 @@ import ru.azenizzka.telegram.handlers.MasterHandler;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
   private final PersonService personService;
-
   private final TelegramBotConfiguration configuration;
-
   private final MasterHandler masterHandler;
+  @Getter private static TelegramBot instance;
 
   TelegramBot(
       PersonService personService,
@@ -28,6 +28,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     this.personService = personService;
     this.configuration = configuration;
     this.masterHandler = masterHandler;
+    instance = this;
   }
 
   @Override

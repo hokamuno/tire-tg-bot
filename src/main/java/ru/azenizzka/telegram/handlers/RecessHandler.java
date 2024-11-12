@@ -1,11 +1,15 @@
 package ru.azenizzka.telegram.handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.azenizzka.entities.Person;
 import ru.azenizzka.services.LessonScheduleService;
+import ru.azenizzka.telegram.TelegramBot;
 import ru.azenizzka.telegram.keyboards.KeyboardType;
 import ru.azenizzka.telegram.messages.CustomMessage;
 import ru.azenizzka.telegram.messages.ErrorMessage;
@@ -31,6 +35,13 @@ public class RecessHandler implements Handler {
     try {
       Day day = DayUtil.convertStrToDay(textMessage);
 
+      CustomMessage pleaseWaitMessage =
+          new CustomMessage(
+              person.getChatId(),
+              KeyboardType.MAIN,
+              "Пожалуйста, подождите. Получаю расписание с сайта..");
+      TelegramBot.getInstance().sendMessage(List.of(pleaseWaitMessage));
+
       List<List<String>> lessons = lessonScheduleService.getLessons(person.getGroupNum(), day);
 
       StringBuilder result =
@@ -49,6 +60,19 @@ public class RecessHandler implements Handler {
       }
 
       message.setText(result.toString());
+
+      InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+      List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+      List<InlineKeyboardButton> rowInline = new ArrayList<>();
+
+      InlineKeyboardButton button = new InlineKeyboardButton("Поддержать разработку бота");
+      button.setUrl("https://www.donationalerts.com/r/azenizzka");
+
+      rowInline.add(button);
+      rowsInline.add(rowInline);
+
+      markupInline.setKeyboard(rowsInline);
+      message.setReplyMarkup(markupInline);
     } catch (Exception e) {
       return List.of(new ErrorMessage(person.getChatId(), e.getMessage()));
     }

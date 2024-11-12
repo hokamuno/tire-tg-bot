@@ -63,6 +63,7 @@ public class AuditLogHandler implements Handler {
 
       InlineKeyboardButton button = new InlineKeyboardButton(person.getChatId());
       button.setCallbackData("reply_to_user");
+      button.setUrl("https://github.com/Azenizzka/tire-tg-bot");
 
       rowInline.add(button);
       rowsInline.add(rowInline);
