@@ -1,7 +1,5 @@
 package ru.azenizzka.utils;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
 public class MessagesConfig {
   public static final String RETURN_COMMAND = "/назад";
   public static final String RECESS_SCHEDULE_COMMAND = "/звонки";
@@ -75,15 +73,8 @@ public class MessagesConfig {
 
   public static final String YOU_ARE_ADMIN = "Вы были назначены администратором";
   public static final String YOU_ARE_NOT_ADMIN = "Вы были разжалованы из администраторов";
-    public static final String START_MESSAGE = """
-                    Вы только что запустили бота для студентов НТК им. А.И. Покрышкина!
-                    Здесь вы сможете легко получить расписание своих пар и звонков.
-                    
-                    Для того, что бы начать пользоваться всеми функциями вам необходимо установить группу.
-                    Что бы это сделать зайдите в настройки(/настройки), затем выберите опцию сменить группу
-                    (/сменить_группу). После чего вам необходимо будет ввести номер своей группы(только номер! Без букв)
-                    
-                    На пример: если ваша группа МР-332, то вы вводите только 332.
-                    Успехов в учебе, студент!
-                    """;
+  public static final String START_MESSAGE =
+      "Для того, что бы начать пользоваться всеми функциями вам необходимо установить группу."
+          + "Что бы это сделать зайдите в настройки, затем выберите опцию сменить группу"
+          + " После чего вам необходимо будет ввести номер своей группы(только номер! Без букв)";
 }
