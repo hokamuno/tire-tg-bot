@@ -28,6 +28,7 @@ public class DayKeyboard {
     row = new KeyboardRow();
 
     row.add("Сегодня");
+    row.add("Завтра");
 
     keyboard.add(row);
     row = new KeyboardRow();

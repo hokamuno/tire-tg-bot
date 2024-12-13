@@ -3,6 +3,7 @@ package ru.azenizzka.utils;
 import java.util.HashMap;
 import java.util.Map;
 import ru.azenizzka.exceptions.BellTypeConvertException;
+import ru.azenizzka.services.DateService;
 
 public class DayUtil {
   public static final Map<String, Integer> strIntMap = new HashMap<>(7);
@@ -44,6 +45,11 @@ public class DayUtil {
   }
 
   public static int convertStrToInt(String str) throws BellTypeConvertException {
+    if (str.startsWith("завтра")) {
+      int result = DateService.getRawDay() + 1;
+      return result > 6 ? 1 : result;
+    }
+
     if (strIntMap.containsKey(str)) {
       return strIntMap.get(str);
     } else {
