@@ -28,12 +28,10 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter-validation:3.3.4")
 
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
-    implementation("javax.xml.bind:jaxb-api:2.3.1")
-    implementation("org.glassfish.jaxb:jaxb-runtime:2.3.1")
+	implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")
+	implementation("javax.xml.bind:jaxb-api:2.3.1")
+	implementation("org.glassfish.jaxb:jaxb-runtime:2.3.1")
 
 
 	implementation("com.google.code.gson:gson:2.8.0")
@@ -43,9 +41,9 @@ dependencies {
 	implementation("org.jsoup:jsoup:1.18.1")
 
 
-    implementation("org.telegram:telegrambots:6.9.7.1")
+	implementation("org.telegram:telegrambots:6.9.7.1")
 
-    implementation("joda-time:joda-time:2.13.0")
+	implementation("joda-time:joda-time:2.13.0")
 
 
 
@@ -54,10 +52,6 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 
 	annotationProcessor("org.projectlombok:lombok")
-
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 
