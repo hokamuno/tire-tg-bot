@@ -1,6 +1,15 @@
-.gradle
+# ide
 .idea
+.vscode
 
+# build system
+bin
 build
+.gradle
+
+# backup
 db-backup
+
+#other
+bin
 .env
