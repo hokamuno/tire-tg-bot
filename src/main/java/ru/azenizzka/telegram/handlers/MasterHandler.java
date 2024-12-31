@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.azenizzka.configuration.TelegramBotConfiguration;
 import ru.azenizzka.entities.Person;
+import ru.azenizzka.telegram.messages.ErrorMessage;
 import ru.azenizzka.utils.MessagesConfig;
 
 @Component
@@ -48,6 +49,13 @@ public class MasterHandler implements Handler {
     }
 
     if (person.getChatId().equals(configuration.getAuditLogChatId())) {
+      return messages;
+    }
+
+    if (person.isBanned()) {
+      SendMessage message = new ErrorMessage(person.getChatId(), "Ошибка доступа к боту..");
+      messages.add(message);
+
       return messages;
     }
 

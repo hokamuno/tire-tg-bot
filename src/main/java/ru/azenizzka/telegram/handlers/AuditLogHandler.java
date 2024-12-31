@@ -10,15 +10,19 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.azenizzka.configuration.TelegramBotConfiguration;
 import ru.azenizzka.entities.Person;
+import ru.azenizzka.repositories.PersonRepository;
 import ru.azenizzka.telegram.messages.CustomMessage;
 import ru.azenizzka.telegram.messages.NotifyMessage;
 
 @Component
 public class AuditLogHandler implements Handler {
   private final TelegramBotConfiguration configuration;
+  private final PersonRepository personRepository;
 
-  public AuditLogHandler(TelegramBotConfiguration configuration) {
+  public AuditLogHandler(
+      TelegramBotConfiguration configuration, PersonRepository personRepository) {
     this.configuration = configuration;
+    this.personRepository = personRepository;
   }
 
   @Override
@@ -39,6 +43,19 @@ public class AuditLogHandler implements Handler {
                 .get(0)
                 .get(0)
                 .getText();
+
+        if (message.getText().startsWith("/ban")) {
+          Person banPerson = personRepository.findByChatId(replyToUserChatId);
+          banPerson.setBanned(!banPerson.isBanned());
+          list.add(
+              new NotifyMessage(
+                  configuration.getAuditLogChatId(),
+                  "banPerson.isBanned() = " + banPerson.isBanned()));
+
+          personRepository.save(banPerson);
+
+          return list;
+        }
 
         sendMessage = new NotifyMessage(replyToUserChatId, message.getText());
         list.add(sendMessage);

@@ -21,4 +21,6 @@ public class Person {
   private String username;
   private boolean isAdmin;
   private InputType inputType;
+
+  private boolean isBanned;
 }
