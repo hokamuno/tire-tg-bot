@@ -22,5 +22,5 @@ public class Person {
   private boolean isAdmin;
   private InputType inputType;
 
-  private boolean isBanned;
+  private boolean isBanned = false;
 }
