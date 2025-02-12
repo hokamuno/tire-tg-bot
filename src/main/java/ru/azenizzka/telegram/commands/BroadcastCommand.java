@@ -30,7 +30,6 @@ public class BroadcastCommand implements Command {
   @Override
   public List<SendMessage> handle(Update update, Person person) {
     List<SendMessage> list = new ArrayList<>();
-    SendMessage message;
 
     StringBuilder messageText = new StringBuilder(update.getMessage().getText());
 
@@ -43,10 +42,13 @@ public class BroadcastCommand implements Command {
 
     messageText.replace(0, getCommand().length() + 1, "");
 
-    for (Person client : personService.findAll()) {
-      message = new NotifyMessage(client.getChatId(), messageText.toString());
-      list.add(message);
-    }
+    personService
+        .findAll()
+        .forEach(
+            client -> {
+              SendMessage message = new NotifyMessage(client.getChatId(), messageText.toString());
+              list.add(message);
+            });
 
     return list;
   }
