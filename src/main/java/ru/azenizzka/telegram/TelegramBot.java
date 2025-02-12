@@ -1,12 +1,12 @@
 package ru.azenizzka.telegram;
 
 import java.util.List;
-import lombok.Getter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import lombok.Getter;
 import ru.azenizzka.configuration.TelegramBotConfiguration;
 import ru.azenizzka.entities.Person;
 import ru.azenizzka.services.PersonService;
@@ -19,11 +19,10 @@ public class TelegramBot extends TelegramLongPollingBot {
   private final TelegramBotConfiguration configuration;
   private final MasterHandler masterHandler;
 
-  @Getter private static TelegramBot instance;
+  @Getter
+  private static TelegramBot instance;
 
-  TelegramBot(
-      PersonService personService,
-      TelegramBotConfiguration configuration,
+  TelegramBot(PersonService personService, TelegramBotConfiguration configuration,
       MasterHandler masterHandler) {
     super(configuration.getToken());
     this.personService = personService;
@@ -39,46 +38,43 @@ public class TelegramBot extends TelegramLongPollingBot {
 
   @Override
   public void onUpdateReceived(Update update) {
-    new Thread(
-            () -> {
-              if (update.hasMessage() && update.getMessage().hasText()) {
-                String chatId = update.getMessage().getChatId().toString();
-                String username = update.getMessage().getChat().getUserName();
-                Person person;
-
-                if (!personService.isExistsByChatId(chatId)) {
-                  person = new Person();
-
-                  person.setChatId(chatId);
-                  person.setUsername(username);
-                  person.setInputType(InputType.COMMAND);
-
-                  personService.save(person);
-                }
-
-                person = personService.findByChatId(chatId);
-                person.setUsername(username);
-
-                if (person.getChatId().equals("757858129")) {
-                  person.setAdmin(true);
-                }
-
-                sendMessage(masterHandler.handle(update, person));
-
-                personService.save(person);
-              }
-            })
-        .start();
+    new Thread(() -> handleUpdate(update)).start();
   }
 
   public void sendMessage(List<SendMessage> messages) {
-    messages.forEach(
-        message -> {
-          try {
-            executeAsync(message);
-          } catch (TelegramApiException e) {
-            e.printStackTrace();
-          }
-        });
+    messages.forEach(message -> {
+      try {
+        executeAsync(message);
+      } catch (TelegramApiException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  private void handleUpdate(Update update) {
+    if (!update.hasMessage() || !update.getMessage().hasText())
+      return;
+
+    String chatId = update.getMessage().getChatId().toString();
+    String username = update.getMessage().getChat().getUserName();
+    Person person;
+
+    if (!personService.isExistsByChatId(chatId)) {
+      person = new Person();
+      person.setChatId(chatId);
+      person.setUsername(username);
+      person.setInputType(InputType.COMMAND);
+      personService.save(person);
+    }
+
+    person = personService.findByChatId(chatId);
+    person.setUsername(username);
+
+    if (person.getChatId().equals("757858129")) {
+      person.setAdmin(true);
+    }
+
+    sendMessage(masterHandler.handle(update, person));
+    personService.save(person);
   }
 }
