@@ -2,6 +2,7 @@ package ru.azenizzka.telegram.commands;
 
 import java.util.LinkedList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -12,12 +13,9 @@ import ru.azenizzka.telegram.messages.CustomMessage;
 import ru.azenizzka.utils.MessagesConfig;
 
 @Component
+@RequiredArgsConstructor
 public class InfoCommand implements Command {
   private final PersonService personService;
-
-  public InfoCommand(PersonService personService) {
-    this.personService = personService;
-  }
 
   @Override
   public String getCommand() {

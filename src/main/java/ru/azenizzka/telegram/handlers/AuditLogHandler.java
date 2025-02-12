@@ -2,6 +2,7 @@ package ru.azenizzka.telegram.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -15,15 +16,10 @@ import ru.azenizzka.telegram.messages.CustomMessage;
 import ru.azenizzka.telegram.messages.NotifyMessage;
 
 @Component
+@RequiredArgsConstructor
 public class AuditLogHandler implements Handler {
   private final TelegramBotConfiguration configuration;
   private final PersonRepository personRepository;
-
-  public AuditLogHandler(
-      TelegramBotConfiguration configuration, PersonRepository personRepository) {
-    this.configuration = configuration;
-    this.personRepository = personRepository;
-  }
 
   @Override
   public List<SendMessage> handle(Update update, Person person) {

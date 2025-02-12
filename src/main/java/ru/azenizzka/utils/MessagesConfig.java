@@ -19,9 +19,9 @@ public class MessagesConfig {
   public static final String DAY_MESSAGE = "✏ *Введите день*";
   public static final String CHANGE_GROUP_MESSAGE =
       """
-			✏ Введите номер вашей группы.
+            ✏ Введите номер вашей группы.
 
-			Пример: Если ваша группа *МР-232*, то вводите *232*.""";
+            Пример: Если ваша группа *МР-232*, то вводите *232*.""";
   public static final String SUCCESS_CHANGE_GROUP_MESSAGE =
       "\uD83D\uDFE2 Вы усппешно сменили группу";
   public static final String NO_LESSONS_MESSAGE = "\uD83E\uDD42 *В этот день у вас нет занятий!*";
@@ -42,17 +42,17 @@ public class MessagesConfig {
 
   public static final String ERROR_TEMPLATE =
       """
-			⭕ Что-то пошло не так..
-			Текст ошибки: *%s*.
+            ⭕ Что-то пошло не так..
+            Текст ошибки: *%s*.
 
-			\uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @Azenizzka""";
+            \uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @Azenizzka""";
 
   public static final String NOTIFY_TEMPLATE =
       """
-			🔔 Новое уведомление
-			*%s*
+            🔔 Новое уведомление
+            *%s*
 
-			\uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @Azenizzka""";
+            \uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @Azenizzka""";
 
   public static final String BELL_TYPE_CONVERT_EXCEPTION = "Некорректный тип звонков";
   public static final String DAY_INPUT_EXCEPTION = "Такого дня не существует";

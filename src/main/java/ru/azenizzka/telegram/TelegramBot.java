@@ -18,6 +18,7 @@ public class TelegramBot extends TelegramLongPollingBot {
   private final PersonService personService;
   private final TelegramBotConfiguration configuration;
   private final MasterHandler masterHandler;
+
   @Getter private static TelegramBot instance;
 
   TelegramBot(
@@ -71,12 +72,13 @@ public class TelegramBot extends TelegramLongPollingBot {
   }
 
   public void sendMessage(List<SendMessage> messages) {
-    try {
-      for (SendMessage message : messages) {
-        executeAsync(message);
-      }
-    } catch (TelegramApiException e) {
-      throw new RuntimeException(e);
-    }
+    messages.forEach(
+        message -> {
+          try {
+            executeAsync(message);
+          } catch (TelegramApiException e) {
+            e.printStackTrace();
+          }
+        });
   }
 }

@@ -1,6 +1,7 @@
 package ru.azenizzka.telegram.handlers;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -12,12 +13,9 @@ import ru.azenizzka.telegram.messages.ErrorMessage;
 import ru.azenizzka.utils.MessagesConfig;
 
 @Component
+@RequiredArgsConstructor
 public class ChangeGroupHandler implements Handler {
   private final LessonScheduleService lessonScheduleService;
-
-  public ChangeGroupHandler(LessonScheduleService lessonScheduleService) {
-    this.lessonScheduleService = lessonScheduleService;
-  }
 
   @Override
   public List<SendMessage> handle(Update update, Person person) {

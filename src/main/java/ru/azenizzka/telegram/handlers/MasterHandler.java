@@ -2,6 +2,7 @@ package ru.azenizzka.telegram.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,6 +12,7 @@ import ru.azenizzka.telegram.messages.ErrorMessage;
 import ru.azenizzka.utils.MessagesConfig;
 
 @Component
+@RequiredArgsConstructor
 public class MasterHandler implements Handler {
 
   private final CommandsHandler commandsHandler;
@@ -21,24 +23,6 @@ public class MasterHandler implements Handler {
   private final AuditLogHandler auditLogHandler;
 
   private final TelegramBotConfiguration configuration;
-
-  public MasterHandler(
-      TelegramBotConfiguration configuration,
-      CommandsHandler commandsHandler,
-      BellTypeHandler bellTypeHandler,
-      ChangeGroupHandler changeGroupHandler,
-      SettingHandler settingHandler,
-      RecessHandler recessHandler,
-      AuditLogHandler auditLogHandler) {
-    this.configuration = configuration;
-
-    this.commandsHandler = commandsHandler;
-    this.bellTypeHandler = bellTypeHandler;
-    this.changeGroupHandler = changeGroupHandler;
-    this.settingHandler = settingHandler;
-    this.recessHandler = recessHandler;
-    this.auditLogHandler = auditLogHandler;
-  }
 
   @Override
   public List<SendMessage> handle(Update update, Person person) {
