@@ -53,22 +53,3 @@ dependencies {
 
 	annotationProcessor("org.projectlombok:lombok")
 }
-
-
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
-
-
-tasks.named("bootJar") {
-	dependsOn("spotlessApply")
-}
-
-tasks.named("bootRun") {
-    dependsOn("spotlessApply")
-}
-
-
-tasks.named("build") {
-    dependsOn("spotlessApply")
-}
