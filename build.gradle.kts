@@ -27,6 +27,7 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
 	implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.2")

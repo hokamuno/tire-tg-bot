@@ -12,10 +12,12 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import ru.azenizzka.utils.Day;
 import ru.azenizzka.utils.DayUtil;
@@ -23,6 +25,7 @@ import ru.azenizzka.utils.DayUtil;
 // TODO: полностью переписать всю эту залупу
 
 @Component
+@Slf4j
 public class LessonScheduleService {
   private String url;
   private Elements rows;
@@ -30,6 +33,7 @@ public class LessonScheduleService {
   private int groupColumn;
   private int neededRow = 0;
 
+  @Cacheable(value = "schedule", key = "{#groupNum, #day.name()}")
   public List<List<String>> getLessons(int groupNum, Day day) throws Exception {
     initUrl(groupNum);
     initNeededRow();
