@@ -45,14 +45,14 @@ public class MessagesConfig {
 			⭕ Что-то пошло не так..
 			Текст ошибки: *%s*.
 
-			\uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @Azenizzka""";
+			\uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @hokamuno""";
 
   public static final String NOTIFY_TEMPLATE =
       """
 			🔔 Новое уведомление
 			*%s*
 
-			\uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @Azenizzka""";
+			\uD83D\uDC68\uD83C\uDFFF\u200D\uD83D\uDCBB Обратная связь: @hokamuno""";
 
   public static final String BELL_TYPE_CONVERT_EXCEPTION = "Некорректный тип звонков";
   public static final String DAY_INPUT_EXCEPTION = "Такого дня не существует";
