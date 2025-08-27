@@ -15,14 +15,17 @@ public class PersonService {
     this.personRepository = personRepository;
   }
 
+  @Transactional(readOnly = true)
   public boolean isExistsByChatId(String chatId) {
     return personRepository.existsByChatId(chatId);
   }
 
+  @Transactional(readOnly = true)
   public List<Person> findAll() {
     return personRepository.findAll();
   }
 
+  @Transactional(readOnly = true)
   public Person findByChatId(String chatId) {
     return personRepository.findByChatId(chatId);
   }
