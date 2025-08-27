@@ -1,9 +1,9 @@
 services:
   app:
-    image: gradle
-    working_dir: /app
-    volumes:
-      - .:/app
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    restart: unless-stopped
     environment:
       DB_HOST: db
       DB_PORT: ${DB_PORT}
@@ -13,13 +13,13 @@ services:
       BOT_NAME: ${BOT_NAME}
       BOT_TOKEN: ${BOT_TOKEN}
       BOT_AUDIT_CHATID: ${BOT_AUDIT_CHATID}
-    command: ./gradlew bootRun
     depends_on:
       - db
       - redis
 
   db:
-    image: postgres
+    image: postgres:latest
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -29,21 +29,11 @@ services:
 
   redis:
     image: redis:latest
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-
-  backup:
-    image: postgres
-    environment:
-      PGPASSWORD: ${DB_PASSWORD}
-    entrypoint: >
-      sh -c "pg_dump -h db -U ${DB_USER} ${DB_NAME} > /backup/backup$(date +%e-%m-%Y_%H-%M).sql"
-    volumes:
-      - ./db-backup:/backup
-    depends_on:
-      - db
 
 volumes:
   postgres_data:
