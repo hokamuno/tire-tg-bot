@@ -37,15 +37,25 @@ public class CacheService {
         CompletableFuture<Void> future =
             asyncCacheService
                 .warmGroupAsync(currentGroupNum, day)
-                .thenAccept(
-                    result -> {
-                      if (result) {
+                .handle(
+                    (result, exception) -> {
+                      if (exception != null) {
+                        failedWarmedCounter.incrementAndGet();
+                        String errorMessage = getShortErrorMessage(exception);
+                        sb.append("\n**")
+                            .append(currentGroupNum)
+                            .append("**: ❌ ")
+                            .append(errorMessage);
+                        log.debug(
+                            "Detailed error for group {}: {}",
+                            currentGroupNum,
+                            exception.getMessage());
+                      } else if (result) {
                         successfullyWarmedCounter.incrementAndGet();
                         sb.append("\n**").append(currentGroupNum).append("**: ✅");
-                      } else {
-                        failedWarmedCounter.incrementAndGet();
-                        sb.append("\n**").append(currentGroupNum).append("**: ❌");
                       }
+
+                      return null;
                     });
 
         allFutures.add(future);
@@ -62,5 +72,16 @@ public class CacheService {
             + failedWarmedCounter.get());
 
     return sb.toString();
+  }
+
+  private String getShortErrorMessage(Throwable exception) {
+    String message = exception.getMessage();
+
+    if (message == null) return "Null exception message";
+
+    if (message.contains("\n")) return message.split("\n")[0];
+    if (message.length() > 50) return message.substring(0, 47) + "...";
+
+    return message;
   }
 }

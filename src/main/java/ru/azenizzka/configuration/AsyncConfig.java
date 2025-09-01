@@ -1,6 +1,7 @@
 package ru.azenizzka.configuration;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -14,9 +15,10 @@ public class AsyncConfig {
   public Executor taskExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
     executor.setCorePoolSize(5);
-    executor.setMaxPoolSize(10);
+    executor.setMaxPoolSize(5);
     executor.setQueueCapacity(2500);
     executor.setThreadNamePrefix("cache-warm-");
+    executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
     executor.initialize();
     return executor;
   }

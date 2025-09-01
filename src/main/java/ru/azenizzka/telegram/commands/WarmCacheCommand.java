@@ -31,7 +31,7 @@ public class WarmCacheCommand implements Command {
     List<SendMessage> result = new LinkedList<>();
     String cacheWarmResult = cacheService.warmCache();
 
-    String[] messagesText = cacheWarmResult.split("\n\n");
+    String[] messagesText = cacheWarmResult.split("\r\n\n");
 
     for (String text : messagesText) {
       result.add(new CustomMessage(person.getChatId(), text));

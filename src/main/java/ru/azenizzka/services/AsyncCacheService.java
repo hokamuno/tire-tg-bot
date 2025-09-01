@@ -18,10 +18,13 @@ public class AsyncCacheService {
   public CompletableFuture<Boolean> warmGroupAsync(int groupNum, Day day) {
     try {
       lessonScheduleService.getLessons(groupNum, day);
+      log.debug("Successfully warmed cache for group {} day {}", groupNum, day);
       return CompletableFuture.completedFuture(true);
     } catch (Exception e) {
       log.warn("Failed to warm cache for group {} day {}: {}", groupNum, day, e.getMessage());
-      return CompletableFuture.completedFuture(false);
+      CompletableFuture<Boolean> failedFuture = new CompletableFuture<>();
+      failedFuture.completeExceptionally(e);
+      return failedFuture;
     }
   }
 }
