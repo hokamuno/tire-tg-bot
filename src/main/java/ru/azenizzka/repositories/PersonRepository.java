@@ -10,6 +10,6 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
   Person findByChatId(String chatId);
 
-  @Query("SELECT p.groupNum FROM Person p WHERE p.groupNum <> 0")
+  @Query("SELECT DISTINCT p.groupNum FROM Person p WHERE p.groupNum <> 0")
   List<Integer> findAllGroupNums();
 }
