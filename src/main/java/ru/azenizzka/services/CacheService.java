@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.azenizzka.repositories.PersonRepository;
@@ -18,6 +19,8 @@ public class CacheService {
 
   private final PersonRepository personRepository;
   private final LessonScheduleService lessonScheduleService;
+
+  @Autowired private final CacheService self;
 
   public String warmCache() {
     List<Integer> groupNums = personRepository.findAllGroupNums();
@@ -36,7 +39,7 @@ public class CacheService {
         final int currentGroupNum = groupNum;
 
         CompletableFuture<Void> future =
-            warmGroupAsync(currentGroupNum, day)
+            self.warmGroupAsync(currentGroupNum, day)
                 .thenAccept(
                     result -> {
                       if (result) {
