@@ -6,7 +6,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.azenizzka.repositories.PersonRepository;
 import ru.azenizzka.utils.Day;
@@ -18,8 +17,6 @@ public class CacheService {
 
   private final PersonRepository personRepository;
   private final AsyncCacheService asyncCacheService;
-
-  @Autowired private final CacheService self;
 
   public String warmCache() {
     List<Integer> groupNums = personRepository.findAllGroupNums();
