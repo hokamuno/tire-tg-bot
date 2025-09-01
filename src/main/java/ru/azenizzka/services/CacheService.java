@@ -46,7 +46,7 @@ public class CacheService {
                             .append(currentGroupNum)
                             .append("**: ❌ ")
                             .append(errorMessage);
-                        log.debug(
+                        log.info(
                             "Detailed error for group {}: {}",
                             currentGroupNum,
                             exception.getMessage());
@@ -70,6 +70,8 @@ public class CacheService {
             + successfullyWarmedCounter.get()
             + "\n**Failed:** "
             + failedWarmedCounter.get());
+
+    log.info("result string: {}", sb);
 
     return sb.toString();
   }
