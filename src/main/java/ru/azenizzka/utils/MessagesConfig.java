@@ -10,6 +10,7 @@ public class MessagesConfig {
   public static final String SET_ADMIN_COMMAND = "/setadmin";
   public static final String DEL_ADMIN_COMMAND = "/deladmin";
   public static final String START_COMMAND = "/start";
+  public static final String WARM_CACHE_COMMAND = "/warm";
 
   public static final String INFO_COMMAND = "/info";
 

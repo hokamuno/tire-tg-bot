@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -20,84 +20,78 @@ import org.jsoup.select.Elements;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import ru.azenizzka.utils.Day;
-import ru.azenizzka.utils.DayUtil;
-
-// TODO: полностью переписать всю эту залупу
 
 @Component
 @Slf4j
 public class LessonScheduleService {
-  private String url;
-  private Elements rows;
 
-  private int groupColumn;
-  private int neededRow = 0;
+  private static final TrustManager[] TRUST_ALL_CERTS =
+      new TrustManager[] {
+        new X509TrustManager() {
+          public X509Certificate[] getAcceptedIssuers() {
+            return null;
+          }
+
+          public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+
+          public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+        }
+      };
 
   @Cacheable(value = "schedule", key = "{#groupNum, #day.name()}")
   public List<List<String>> getLessons(int groupNum, Day day) throws Exception {
-    initUrl(groupNum);
-    initNeededRow();
-    initGroupColumn(groupNum);
+    String url = findGroupUrl(groupNum);
+    Document document = getDocumentByUrl(url);
+    Elements rows = document.select("table").first().select("tr");
+
+    int neededRow = findNeededRow(rows);
+    int groupColumn = findGroupColumn(rows, neededRow, groupNum);
+    int groupCount = getGroupCount(rows, neededRow);
+
     List<List<String>> lessonsList = new ArrayList<>();
 
-    int dayNum;
+    int dayNum = calculateDayNum(day);
 
-    if (day == Day.TODAY) {
-      dayNum = DateService.getRawDay();
-    } else {
-      dayNum = DayUtil.convertDayToInt(day);
-    }
+    if (dayNum == 6) return lessonsList;
 
-    dayNum--;
-
-    switch (day) {
-      case TODAY -> dayNum = (DateService.getRawDay() - 1);
-      case MONDAY -> dayNum = 0;
-      case TUESDAY -> dayNum = 1;
-      case WEDNESDAY -> dayNum = 2;
-      case THURSDAY -> dayNum = 3;
-      case FRIDAY -> dayNum = 4;
-      case SATURDAY -> dayNum = 5;
-    }
-
-    if (dayNum == 6) {
-      return lessonsList;
-    }
-
-    int increment = 3;
-
-    // TODO: и вот эту херню обязательно! пмять жалк..
-    String groupStr = String.valueOf(groupNum);
-    if (Integer.parseInt(String.valueOf(groupStr.charAt(0))) >= 3) {
-      increment--;
-    }
+    int increment = calculateIncrement(groupNum);
 
     int startRowIndex = (neededRow + increment) + 6 * dayNum;
     int endRowIndex = startRowIndex + 6;
-    int need = getGroupCount() * 3;
+    int need = groupCount * 3;
 
     for (int rowIndex = startRowIndex; rowIndex < endRowIndex; rowIndex++) {
       Element row = rows.get(rowIndex);
       Elements columns = row.select("td");
 
-      increment = 0;
-      while (initStartColumnIndex(columns) == -1) {
-        increment++;
+      int currentIncrement = increment;
+      int currentStartRowIndex;
+      int currentRowIndex;
 
-        startRowIndex = (neededRow + increment) + (6 * dayNum);
-        rowIndex = startRowIndex;
+      int startColumnIndex = findStartColumnIndex(columns);
+      while (startColumnIndex == -1) {
+        currentIncrement++;
+        currentStartRowIndex = (neededRow + currentIncrement) + (6 * dayNum);
+        currentRowIndex = currentStartRowIndex;
 
-        endRowIndex = startRowIndex + 6;
-        row = rows.get(rowIndex);
+        if (currentRowIndex >= rows.size()) {
+          break;
+        }
+
+        row = rows.get(currentRowIndex);
         columns = row.select("td");
+        startColumnIndex = findStartColumnIndex(columns);
       }
 
-      int index = initStartColumnIndex(columns);
+      if (startColumnIndex == -1) {
+        continue;
+      }
+
+      int index = startColumnIndex;
 
       int decrement = 0;
-
       for (int i = columns.size(); i > (need + index); i--) {
-        if (columns.get(i - 1).text().isEmpty()) {
+        if (i - 1 < columns.size() && columns.get(i - 1).text().isEmpty()) {
           decrement++;
         } else {
           break;
@@ -108,9 +102,13 @@ public class LessonScheduleService {
         throw new Exception("В строке недостаточно столбцов! Может быть вызвано из-за ВПР");
       }
 
-      String lesson = columns.get(index + 1 + (groupColumn * 3)).text();
-      String num = columns.get(index + (groupColumn * 3)).text();
+      int targetIndex = index + 1 + (groupColumn * 3);
+      if (targetIndex >= columns.size()) {
+        continue;
+      }
 
+      String lesson = columns.get(targetIndex).text();
+      String num = columns.get(index + (groupColumn * 3)).text();
       String cabinet = columns.get(index + 2 + (groupColumn * 3)).text();
 
       if (!lesson.isEmpty()) {
@@ -118,152 +116,117 @@ public class LessonScheduleService {
         tempList.add(num);
         tempList.add(lesson);
         tempList.add(cabinet);
-
         lessonsList.add(tempList);
       }
     }
     return lessonsList;
   }
 
-  private int initStartColumnIndex(Elements columns) {
-    for (int i = 0; i < columns.size(); i++) {
-      Pattern pattern = Pattern.compile("^\\d+");
-      if (pattern.matcher(columns.get(i).text()).matches()) {
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  private void initNeededRow() {
-    Element row;
-
-    for (int i = 0; i < 10; i++) { // Нахождение первой строки, где более трех заполненных колонок
-      row = rows.get(i);
-
-      int counter = 0;
-      for (Element column : row.select("td")) {
-        if (!column.text().isEmpty()) {
-          counter++;
-        }
-      }
-
-      if (counter > 3) {
-        neededRow = i;
-        break;
-      }
-    }
-  }
-
-  private int getGroupCount() {
-    Element row = rows.get(neededRow);
-    int count = 0;
-
-    for (Element column : row.select("td")) {
-      if (!column.text().isEmpty()) {
-        count++;
-      }
-    }
-
-    return count;
-  }
-
-  public boolean isGroupExists(int groupNum) throws Exception {
-    Document mainDocument;
-
-    try {
-      mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
-    } catch (IOException e) {
-      throw new Exception("Сайт недоступен!");
-    }
-
+  private String findGroupUrl(int groupNum) throws Exception {
+    Document mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
     Elements elements = mainDocument.select("a[href]");
 
     for (Element hyperLink : elements) {
       String hyperText = hyperLink.text();
       if (hyperText.contains(String.valueOf(groupNum))) {
-        return true;
+        return "https://www.ntmm.ru"
+            + hyperLink.attr("href").replace(".htm", ".files")
+            + "/sheet001.htm";
       }
     }
-
-    return false;
-  }
-
-  // todo: ОСОБЕННО ЭТО!!! MID!!!!!!!
-  private Document getDocumentByUrl(String url)
-      throws IOException, NoSuchAlgorithmException, KeyManagementException {
-    SSLContext sslContext = SSLContext.getInstance("TLS");
-
-    sslContext.init(
-        null,
-        new TrustManager[] {
-          new X509TrustManager() {
-            public X509Certificate[] getAcceptedIssuers() {
-              return null;
-            }
-
-            public void checkClientTrusted(X509Certificate[] certs, String authType) {}
-
-            public void checkServerTrusted(X509Certificate[] certs, String authType) {}
-          }
-        },
-        new java.security.SecureRandom());
-
-    SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-    return Jsoup.connect(url).sslSocketFactory(sslSocketFactory).get();
-  }
-
-  private void initUrl(int groupNum) throws Exception {
-    Document mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
-    Elements elements = mainDocument.select("a[href]");
-
-    for (Element hyperLink : elements) {
-      String hyprText = hyperLink.text();
-
-      if (hyprText.contains(String.valueOf(groupNum))) {
-        url =
-            "https://www.ntmm.ru"
-                + hyperLink.attr("href").replace(".htm", ".files")
-                + "/sheet001.htm";
-        initDocument();
-
-        return;
-      }
-    }
-
     throw new Exception("Такой группы не существует!");
   }
 
-  private void initDocument() throws Exception {
-    Document document;
+  private int findNeededRow(Elements rows) {
+    for (int i = 0; i < Math.min(10, rows.size()); i++) {
+      Element row = rows.get(i);
+      AtomicInteger counter = new AtomicInteger();
 
-    try {
-      document = getDocumentByUrl(url);
-    } catch (IOException e) {
-      throw new Exception("Сайт недоступен");
+      for (Element column : row.select("td")) {
+        if (!column.text().isEmpty()) counter.getAndIncrement();
+      }
+
+      if (counter.get() > 3) return i;
     }
 
-    rows = Objects.requireNonNull(document.select("table").first()).select("tr");
+    return 0;
   }
 
-  private void initGroupColumn(int groupNum) {
+  private int findGroupColumn(Elements rows, int neededRow, int groupNum) throws Exception {
     Element row = rows.get(neededRow);
     Elements columns = row.select("td");
     int out = -1;
 
     for (Element column : columns) {
       String group = column.text();
+      if (!group.isEmpty()) out++;
 
-      if (!group.isEmpty()) {
-        out++;
-      }
+      if (group.endsWith("-" + groupNum)) return out;
+    }
+    throw new Exception("Колонка группы не найдена");
+  }
 
-      if (group.endsWith(String.valueOf("-" + groupNum))) {
-        groupColumn = out;
-        return;
+  private int getGroupCount(Elements rows, int neededRow) {
+    Element row = rows.get(neededRow);
+    int count = 0;
+    for (Element column : row.select("td")) {
+      if (!column.text().isEmpty()) count++;
+    }
+    return count;
+  }
+
+  private int findStartColumnIndex(Elements columns) {
+    for (int i = 0; i < columns.size(); i++) {
+      Pattern pattern = Pattern.compile("^\\d+");
+      if (pattern.matcher(columns.get(i).text()).matches()) return i;
+    }
+    return -1;
+  }
+
+  private int calculateDayNum(Day day) {
+    return switch (day) {
+      case TODAY -> DateService.getRawDay() - 1;
+      case MONDAY -> 0;
+      case TUESDAY -> 1;
+      case WEDNESDAY -> 2;
+      case THURSDAY -> 3;
+      case FRIDAY -> 4;
+      case SATURDAY -> 5;
+    };
+  }
+
+  private int calculateIncrement(int groupNum) {
+    String groupStr = String.valueOf(groupNum);
+
+    if (Integer.parseInt(String.valueOf(groupStr.charAt(0))) >= 3) return 2;
+
+    return 3;
+  }
+
+  public boolean isGroupExists(int groupNum) throws Exception {
+    try {
+      Document mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
+      Elements elements = mainDocument.select("a[href]");
+
+      for (Element hyperLink : elements) {
+        String hyperText = hyperLink.text();
+        if (hyperText.contains(String.valueOf(groupNum))) return true;
       }
+      return false;
+    } catch (IOException e) {
+      throw new Exception("Сайт недоступен!");
+    }
+  }
+
+  private Document getDocumentByUrl(String url) throws IOException {
+    try {
+      SSLContext sslContext = SSLContext.getInstance("TLS");
+      sslContext.init(null, TRUST_ALL_CERTS, new java.security.SecureRandom());
+      SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+      return Jsoup.connect(url).sslSocketFactory(sslSocketFactory).timeout(10000).get();
+    } catch (NoSuchAlgorithmException | KeyManagementException e) {
+      throw new IOException("SSL error", e);
     }
   }
 }

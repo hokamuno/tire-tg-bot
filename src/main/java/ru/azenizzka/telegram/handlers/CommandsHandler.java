@@ -1,7 +1,7 @@
 package ru.azenizzka.telegram.handlers;
 
-import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,32 +11,9 @@ import ru.azenizzka.telegram.messages.ErrorMessage;
 import ru.azenizzka.utils.MessagesConfig;
 
 @Component
+@RequiredArgsConstructor
 public class CommandsHandler implements Handler {
   private final List<Command> commands;
-
-  public CommandsHandler(
-      BellCommand bellCommand,
-      ReturnCommand returnCommand,
-      InfoCommand infoCommand,
-      SettingsCommand settingsCommand,
-      ScheduleCommand scheduleCommand,
-      BroadcastCommand broadcastCommand,
-      DelAdminCommand delAdminCommand,
-      SetAdminCommand setAdminCommand,
-      StartCommand startCommand) {
-    this.commands = new ArrayList<>();
-
-    commands.add(returnCommand);
-    commands.add(bellCommand);
-    commands.add(settingsCommand);
-    commands.add(scheduleCommand);
-    commands.add(broadcastCommand);
-    commands.add(delAdminCommand);
-    commands.add(setAdminCommand);
-    commands.add(startCommand);
-
-    commands.add(infoCommand);
-  }
 
   @Override
   public List<SendMessage> handle(Update update, Person person) {
