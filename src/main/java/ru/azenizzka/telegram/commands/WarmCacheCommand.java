@@ -1,5 +1,6 @@
 package ru.azenizzka.telegram.commands;
 
+import java.util.LinkedList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,15 @@ public class WarmCacheCommand implements Command {
 
   @Override
   public List<SendMessage> handle(Update update, Person person) {
-    return List.of(new CustomMessage(person.getChatId(), cacheService.warmCache()));
+    List<SendMessage> result = new LinkedList<>();
+    String cacheWarmResult = cacheService.warmCache();
+
+    String[] messagesText = cacheWarmResult.split("\n\n");
+
+    for (String text : messagesText) {
+      result.add(new CustomMessage(person.getChatId(), text));
+    }
+
+    return result;
   }
 }

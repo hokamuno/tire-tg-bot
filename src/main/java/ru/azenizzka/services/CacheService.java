@@ -1,10 +1,13 @@
 package ru.azenizzka.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.azenizzka.repositories.PersonRepository;
 import ru.azenizzka.utils.Day;
 
@@ -16,40 +19,59 @@ public class CacheService {
   private final PersonRepository personRepository;
   private final LessonScheduleService lessonScheduleService;
 
-  @Transactional
   public String warmCache() {
     List<Integer> groupNums = personRepository.findAllGroupNums();
     Day[] days = Day.values();
 
-    int successfullyWarmedCounter = 0;
-    int failedWarmedCounter = 0;
-
+    AtomicInteger successfullyWarmedCounter = new AtomicInteger(0);
+    AtomicInteger failedWarmedCounter = new AtomicInteger(0);
     StringBuilder sb = new StringBuilder();
 
+    List<CompletableFuture<Void>> allFutures = new ArrayList<>();
+
     for (Day day : days) {
-      log.info("Warm day {}", day.toString());
       sb.append("\n\nDay: ").append(day.name());
 
       for (int groupNum : groupNums) {
-        sb.append("\n**").append(groupNum).append("**: ");
+        final int currentGroupNum = groupNum;
 
-        try {
-          lessonScheduleService.getLessons(groupNum, day);
-          successfullyWarmedCounter++;
-          log.info("Successfully warmed group {}", groupNum);
-          sb.append("✅");
-        } catch (Exception e) {
-          failedWarmedCounter++;
-          log.info("Failed warmed group {}", groupNum);
-          sb.append("❌ ").append(e.getMessage());
-        }
+        CompletableFuture<Void> future =
+            warmGroupAsync(currentGroupNum, day)
+                .thenAccept(
+                    result -> {
+                      if (result) {
+                        successfullyWarmedCounter.incrementAndGet();
+                        sb.append("\n**").append(currentGroupNum).append("**: ✅");
+                      } else {
+                        failedWarmedCounter.incrementAndGet();
+                        sb.append("\n**").append(currentGroupNum).append("**: ❌");
+                      }
+                    });
+
+        allFutures.add(future);
       }
     }
 
+    CompletableFuture.allOf(allFutures.toArray(new CompletableFuture[0])).join();
+
     sb.insert(
         0,
-        "**Successfully:** " + successfullyWarmedCounter + "\n**Failed:** " + failedWarmedCounter);
+        "**Successfully:** "
+            + successfullyWarmedCounter.get()
+            + "\n**Failed:** "
+            + failedWarmedCounter.get());
 
     return sb.toString();
+  }
+
+  @Async("cacheWarmExecutor")
+  public CompletableFuture<Boolean> warmGroupAsync(int groupNum, Day day) {
+    try {
+      lessonScheduleService.getLessons(groupNum, day);
+      return CompletableFuture.completedFuture(true);
+    } catch (Exception e) {
+      log.warn("Failed to warm cache for group {} day {}: {}", groupNum, day, e.getMessage());
+      return CompletableFuture.completedFuture(false);
+    }
   }
 }
