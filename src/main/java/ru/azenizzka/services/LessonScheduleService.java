@@ -125,13 +125,15 @@ public class LessonScheduleService {
   private String findGroupUrl(int groupNum) throws Exception {
     Document mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
     Elements elements = mainDocument.select("a[href]");
+    String pattern = ".*-" + groupNum + "(?![0-9]).*$";
 
     for (Element hyperLink : elements) {
       String hyperText = hyperLink.text();
-      if (hyperText.contains(String.valueOf(groupNum))) {
+
+      if (hyperText.matches(pattern)) {
         return "https://www.ntmm.ru"
-            + hyperLink.attr("href").replace(".htm", ".files")
-            + "/sheet001.htm";
+                + hyperLink.attr("href").replace(".htm", ".files")
+                + "/sheet001.htm";
       }
     }
     throw new Exception("Такой группы не существует!");
@@ -163,6 +165,7 @@ public class LessonScheduleService {
 
       if (group.endsWith("-" + groupNum)) return out;
     }
+
     throw new Exception("Колонка группы не найдена");
   }
 
