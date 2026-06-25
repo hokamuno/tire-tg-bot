@@ -2,15 +2,21 @@ package ru.azenizzka.telegram.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.azenizzka.configuration.TelegramBotConfiguration;
 import ru.azenizzka.entities.Person;
+import ru.azenizzka.services.LessonScheduleService;
 import ru.azenizzka.telegram.messages.ErrorMessage;
+import ru.azenizzka.utils.Day;
 import ru.azenizzka.utils.MessagesConfig;
 
 @Component
+@Slf4j
 public class MasterHandler implements Handler {
 
   private final CommandsHandler commandsHandler;
@@ -22,14 +28,15 @@ public class MasterHandler implements Handler {
 
   private final TelegramBotConfiguration configuration;
 
+
   public MasterHandler(
-      TelegramBotConfiguration configuration,
-      CommandsHandler commandsHandler,
-      BellTypeHandler bellTypeHandler,
-      ChangeGroupHandler changeGroupHandler,
-      SettingHandler settingHandler,
-      RecessHandler recessHandler,
-      AuditLogHandler auditLogHandler) {
+          TelegramBotConfiguration configuration,
+          CommandsHandler commandsHandler,
+          BellTypeHandler bellTypeHandler,
+          ChangeGroupHandler changeGroupHandler,
+          SettingHandler settingHandler,
+          RecessHandler recessHandler,
+          AuditLogHandler auditLogHandler) {
     this.configuration = configuration;
 
     this.commandsHandler = commandsHandler;

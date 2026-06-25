@@ -12,6 +12,9 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import jakarta.annotation.PostConstruct;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -122,6 +125,21 @@ public class LessonScheduleService {
     return lessonsList;
   }
 
+  public boolean isGroupExists(int groupNum) throws Exception {
+    try {
+      Document mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
+      Elements elements = mainDocument.select("a[href]");
+
+      for (Element hyperLink : elements) {
+        String hyperText = hyperLink.text();
+        if (hyperText.contains(String.valueOf(groupNum))) return true;
+      }
+      return false;
+    } catch (IOException e) {
+      throw new Exception("Сайт недоступен!");
+    }
+  }
+
   private String findGroupUrl(int groupNum) throws Exception {
     Document mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
     Elements elements = mainDocument.select("a[href]");
@@ -204,21 +222,6 @@ public class LessonScheduleService {
     if (Integer.parseInt(String.valueOf(groupStr.charAt(0))) >= 3) return 2;
 
     return 3;
-  }
-
-  public boolean isGroupExists(int groupNum) throws Exception {
-    try {
-      Document mainDocument = getDocumentByUrl("https://www.ntmm.ru/student/raspisanie.php");
-      Elements elements = mainDocument.select("a[href]");
-
-      for (Element hyperLink : elements) {
-        String hyperText = hyperLink.text();
-        if (hyperText.contains(String.valueOf(groupNum))) return true;
-      }
-      return false;
-    } catch (IOException e) {
-      throw new Exception("Сайт недоступен!");
-    }
   }
 
   private Document getDocumentByUrl(String url) throws IOException {

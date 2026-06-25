@@ -16,6 +16,7 @@ public class Person {
   private int id;
 
   private String chatId;
+
   private int groupNum;
 
   private String username;

@@ -6,6 +6,7 @@
 bin
 build
 .gradle
+**/.DS_Store
 
 # backup
 db-backup

@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.app
+      dockerfile: Dockerfile
     restart: unless-stopped
     environment:
       DB_HOST: db
@@ -15,10 +15,9 @@ services:
       BOT_AUDIT_CHATID: ${BOT_AUDIT_CHATID}
     depends_on:
       - db
-      - redis
 
   db:
-    image: postgres:latest
+    image: postgres:17
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
@@ -27,12 +26,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  redis:
-    image: redis:latest
-    restart: unless-stopped
-    volumes:
-      - redis_data:/data
 
 volumes:
   postgres_data:
-  redis_data:
