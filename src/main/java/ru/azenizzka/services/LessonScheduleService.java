@@ -12,9 +12,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import jakarta.annotation.PostConstruct;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -150,8 +147,8 @@ public class LessonScheduleService {
 
       if (hyperText.matches(pattern)) {
         return "https://www.ntmm.ru"
-                + hyperLink.attr("href").replace(".htm", ".files")
-                + "/sheet001.htm";
+            + hyperLink.attr("href").replace(".htm", ".files")
+            + "/sheet001.htm";
       }
     }
     throw new Exception("Такой группы не существует!");
